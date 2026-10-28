@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <assignments>
+        <name>Mark_Description</name>
+        <label>Mark Description</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Description</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>SBX inactive flow ran</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>Inactive in Production. When active, new accounts get Description "SBX inactive flow ran".</description>
+    <environments>Default</environments>
+    <interviewLabel>SBX Inactive Test {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SBX Inactive Test</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Mark_Description</targetReference>
+        </connector>
+        <filterFormula>NOT(OR({!$Setup.Automation_Settings__c.Bypass_All__c}, {!$Setup.Automation_Settings__c.Bypass_Flows__c}))</filterFormula>
+        <object>Account</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

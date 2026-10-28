@@ -647,7 +647,7 @@ class Org:
             if tmp:
                 os.remove(tmp)
 
-    def query(self, soql):
+    def query(self, soql, tooling=False):
         """Small REST query; nested relationship values are flattened to 'Rel.Field' keys."""
         def flat(rec, prefix=""):
             out = {}
@@ -659,7 +659,8 @@ class Org:
                 else:
                     out[prefix + k] = v
             return out
-        return [flat(r) for r in self.cli(["data", "query", "--query", soql])["records"]]
+        args = ["data", "query", "--query", soql] + (["--use-tooling-api"] if tooling else [])
+        return [flat(r) for r in self.cli(args)["records"]]
 
     def query_bulk(self, soql):
         out = self.temp(".csv")

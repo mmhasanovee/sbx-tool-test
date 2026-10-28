@@ -117,4 +117,16 @@ private class SbxAutomationTest {
 
         Assert.areEqual(1, [SELECT COUNT() FROM Integration_Log__c WITH SYSTEM_MODE]);
     }
+
+    @IsTest
+    static void buildsErpUrl() {
+        Assert.areEqual('https://erp.example.com/cases', SbxEndpoints.erpUrl('/cases'));
+    }
+
+    @IsTest
+    static void postCopyLogsSandboxName() {
+        Test.testSandboxPostCopyScript(new SbxPostCopy(), UserInfo.getOrganizationId(), UserInfo.getOrganizationId(), 'SBXTEST');
+
+        Assert.areEqual('POSTCOPY SBXTEST', [SELECT Payload__c FROM Integration_Log__c WITH SYSTEM_MODE LIMIT 1].Payload__c);
+    }
 }

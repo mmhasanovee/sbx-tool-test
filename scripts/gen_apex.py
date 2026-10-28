@@ -171,6 +171,33 @@ public with sharing class IntegrationSyncScheduler implements Schedulable {
     }
 }
 """,
+    "SbxEndpoints": """/**
+ * Hard-coded integration base URLs. Kept on purpose to test whether a sandbox tool swaps URLs inside Apex code.
+ */
+public with sharing class SbxEndpoints {
+    public static final String ERP_BASE_URL = 'https://erp.example.com';
+    public static final String PAYMENTS_BASE_URL = 'https://payments.example.com';
+
+    public static String erpUrl(String path) {
+        return ERP_BASE_URL + path;
+    }
+}
+""",
+    "SbxPostCopy": """/**
+ * Runs once in a new or refreshed sandbox and logs which sandbox it ran in.
+ */
+public with sharing class SbxPostCopy implements SandboxPostCopy {
+    public void runApexClass(SandboxContext context) {
+        insert as system new Integration_Log__c(
+            Direction__c = 'Inbound',
+            Endpoint__c = 'SandboxPostCopy',
+            Status_Code__c = 200,
+            Payload__c = 'POSTCOPY ' + context.sandboxName(),
+            Logged_At__c = System.now()
+        );
+    }
+}
+""",
     "SbxAutomationTest": """@IsTest
 private class SbxAutomationTest {
     private class ErpMock implements HttpCalloutMock {
@@ -289,6 +316,18 @@ private class SbxAutomationTest {
         new IntegrationSyncScheduler().execute((SchedulableContext) null);
 
         Assert.areEqual(1, [SELECT COUNT() FROM Integration_Log__c WITH SYSTEM_MODE]);
+    }
+
+    @IsTest
+    static void buildsErpUrl() {
+        Assert.areEqual('https://erp.example.com/cases', SbxEndpoints.erpUrl('/cases'));
+    }
+
+    @IsTest
+    static void postCopyLogsSandboxName() {
+        Test.testSandboxPostCopyScript(new SbxPostCopy(), UserInfo.getOrganizationId(), UserInfo.getOrganizationId(), 'SBXTEST');
+
+        Assert.areEqual('POSTCOPY SBXTEST', [SELECT Payload__c FROM Integration_Log__c WITH SYSTEM_MODE LIMIT 1].Payload__c);
     }
 }
 """,
@@ -432,6 +471,41 @@ FLOWS = {
         <triggerType>RecordBeforeSave</triggerType>
     </start>
     <status>Active</status>
+</Flow>
+""",
+    # Deployed inactive on purpose, to test whether a sandbox tool can activate it.
+    "SBX_Inactive_Test": f"""{HEADER}<Flow {NS}>
+    <apiVersion>{API}</apiVersion>
+    <assignments>
+        <name>Mark_Description</name>
+        <label>Mark Description</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Description</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>SBX inactive flow ran</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>Inactive in Production. When active, new accounts get Description "SBX inactive flow ran".</description>
+    <environments>Default</environments>
+    <interviewLabel>SBX Inactive Test {{!$Flow.CurrentDateTime}}</interviewLabel>
+    <label>SBX Inactive Test</label>
+{FLOW_META}    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Mark_Description</targetReference>
+        </connector>
+        <filterFormula>NOT({BYPASS_FLOWS})</filterFormula>
+        <object>Account</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Draft</status>
 </Flow>
 """,
 }
