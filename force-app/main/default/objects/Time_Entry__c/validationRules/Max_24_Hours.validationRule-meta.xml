@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Max_24_Hours</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT($Setup.Automation_Settings__c.Bypass_All__c), Hours__c &gt; 24)</errorConditionFormula>
+    <errorMessage>A time entry cannot exceed 24 hours.</errorMessage>
+</ValidationRule>

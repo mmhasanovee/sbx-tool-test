@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Role xmlns="http://soap.sforce.com/2006/04/metadata">
+    <mayForecastManagerShare>false</mayForecastManagerShare>
+    <name>SBX Service Manager</name>
+    <parentRole>SBX_VP_Service</parentRole>
+</Role>

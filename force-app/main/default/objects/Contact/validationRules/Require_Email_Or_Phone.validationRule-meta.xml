@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Email_Or_Phone</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT($Setup.Automation_Settings__c.Bypass_All__c), ISBLANK(Email), ISBLANK(Phone))</errorConditionFormula>
+    <errorMessage>A contact needs an Email or a Phone.</errorMessage>
+</ValidationRule>

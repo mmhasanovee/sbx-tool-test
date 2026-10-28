@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Phase__c</fullName>
+    <label>Project Phase</label>
+    <referenceTo>Project_Phase__c</referenceTo>
+    <relationshipLabel>Work Packages</relationshipLabel>
+    <relationshipName>Work_Packages</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    <type>MasterDetail</type>
+</CustomField>

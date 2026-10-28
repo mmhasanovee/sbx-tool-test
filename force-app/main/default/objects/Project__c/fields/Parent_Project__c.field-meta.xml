@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Parent_Project__c</fullName>
+    <label>Parent Project</label>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <referenceTo>Project__c</referenceTo>
+    <relationshipLabel>Child Projects</relationshipLabel>
+    <relationshipName>Child_Projects</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>
